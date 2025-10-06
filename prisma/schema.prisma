@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String       @id @default(cuid())
+  email     String       @unique
+  clerkId   String       @unique
+  name      String
+  image     String?
+  createdAt DateTime     @default(now())
+
+  // Relations
+  events     Event[]         @relation("UserEvents")       // Events created by this user
+  favourites Favourites[]
+  visits     Visitors[]
+}
+
+model Event {
+  id        String       @id @default(cuid())
+  title     String
+  date      DateTime
+  createdAt DateTime     @default(now())
+  city      String
+  category  String
+  image     String
+
+  creator   User          @relation("UserEvents", fields: [creatorId], references: [id], onDelete: Cascade)
+  creatorId String
+
+  favourites Favourites[]
+  visitors   Visitors[]
+}
+
+model Favourites {
+  id      String  @id @default(cuid())
+  
+
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
+
+  event   Event  @relation(fields: [eventId], references: [id])
+  eventId String
+
+  @@unique([userId, eventId])
+
+
+}
+
+model Visitors {
+  id      String  @id @default(cuid())
+  
+
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
+
+  event   Event  @relation(fields: [eventId], references: [id])
+  eventId String
+}
