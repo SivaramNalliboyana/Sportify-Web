@@ -185,7 +185,7 @@ export async function visitEvent(eventId:string){
             }
         })
 
-        revalidatePath(`/events/${eventId}`)
+        revalidatePath(` /events/${eventId}`)
 
         return {success:true};
         
