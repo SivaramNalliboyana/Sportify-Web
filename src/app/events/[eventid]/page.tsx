@@ -86,7 +86,7 @@ const ViewEvent = async ({ params }: { params: { eventid: string } }) => {
                 </div>
 
                 <div className='relative w-full h-96 mt-8 '>
-                    <Image src="/cricket.jpg" alt="Bg image" fill className='object-cover shadow-2xl' />
+                    <Image src={event.image} alt="Bg image" fill className='object-cover shadow-2xl' />
                 </div>
 
                 <div>

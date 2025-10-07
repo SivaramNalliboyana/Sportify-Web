@@ -80,11 +80,11 @@ const SportCard = ({event}: {event:SportEvent}) => {
     }
 
   return (
-    <Link href={`/events/${event.id}`}>
+    
     <div className='w-full h-[21rem] inset-shadow-2xs border-[0.5px] border-gray-200 rounded-lg'>
 
       <div className='relative overflow-hidden w-full h-[13rem] rounded-t-lg'>
-            <Image src="/cricket.jpg" alt="Bg image" fill className='object-cover'></Image>
+            <Image src={event.image} alt="Bg image" fill className='object-cover'></Image>
 
             <div className="flex items-center absolute top-3 left-0 right-0 z-10 pr-3 pl-3 justify-between">
                 
@@ -99,7 +99,7 @@ const SportCard = ({event}: {event:SportEvent}) => {
                 </div>
 
                 {/*Heart icon container*/}
-                <div onClick={handleLike} className='flex rounded-full bg-white items-center justify-center w-[28px] h-[28px]'>
+                <div onClick={handleLike} className='flex rounded-full bg-white items-center justify-center w-[28px] h-[28px] transition cursor-pointer'>
                     {hasLiked ? (<FaHeart className='text-red-500 w-3.5 h-4' />) : (<FaRegHeart className={`text-black w-3.5 h-4`} />)}
                     
                 </div>
@@ -109,7 +109,7 @@ const SportCard = ({event}: {event:SportEvent}) => {
             </div>
       </div>
 
-     
+     <Link href={`/events/${event.id}`}>
       <div className='pt-5 pl-5'>
         <h1 className={`${montserrat.className} text-black font-semibold text-[18px]`}>{event.title}</h1>
         
@@ -159,9 +159,10 @@ const SportCard = ({event}: {event:SportEvent}) => {
         </div>
      
       </div>  
+       </Link>
 
     </div>
-    </Link>
+   
   )
 }
 

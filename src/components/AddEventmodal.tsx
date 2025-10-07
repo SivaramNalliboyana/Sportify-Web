@@ -3,6 +3,8 @@
 import { createEvent } from '@/actions/event.actions';
 import { useAddEventStore } from '@/hooks/useAddEventModal';
 import { montserrat } from '@/utils/fonts';
+import { supabase } from '@/utils/supabase';
+import { UploadDropzone } from '@/utils/uploadthing';
 import React, { useState } from 'react'
 import DatePicker from 'react-datepicker';
 import toast from 'react-hot-toast';
@@ -12,7 +14,7 @@ import { TbPhotoPlus } from 'react-icons/tb';
 
 const AddEventmodal = () => {
   const addEventState = useAddEventStore((state)=> state);
-    const sports = ["Cricket", "Football", "Basketball", "Badminton"];
+  const sports = ["Cricket", "Football", "Basketball", "Badminton"];
   
   
   
@@ -24,21 +26,43 @@ const AddEventmodal = () => {
     const handleEventSubmit = async () => {
       addEventState.setisPosting(true);
 
+    
+
+      
+
         try {
-          if (addEventState.date === null){
+          if (addEventState.date === null || addEventState.image === null){
             return;
           }
 
-           const result = await createEvent(addEventState.title, "", addEventState.date, addEventState.city, addEventState.sport);
-           
-           if (result?.success){
-            addEventState.clearState();
-            addEventState.close();
+          const fileName = `${Date.now()}_${addEventState.image.name}`;
 
-            toast.success("Event created")
-           }else{
-             toast.success("Error creating event")
-           }
+          const { data, error } = await supabase.storage
+              .from("images") 
+              .upload(fileName,  addEventState.image);
+
+          if (error) {
+            console.error("Upload error:", error);
+          } else {
+              console.log("Uploaded:", data);
+              const { data: publicUrlData } = supabase.storage
+                .from("images")
+                .getPublicUrl(fileName);
+
+              const result = await createEvent(addEventState.title, publicUrlData.publicUrl, addEventState.date, addEventState.city, addEventState.sport);
+           
+              if (result?.success){
+                addEventState.clearState();
+                addEventState.close();
+
+                toast.success("Event created")
+              }else{
+                toast.success("Error creating event")
+              }
+            }
+
+
+           
         
         
           } catch (error) {
@@ -59,7 +83,7 @@ const AddEventmodal = () => {
         <div onClick={handleModalClose} className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
         <div onClick={(e) => e.stopPropagation()} className="bg-white p-6 rounded-xl shadow-lg w-[600px] text-center">
 
-           {/* Image upload section */}
+           {/* Image upload section*/}
           <h1 className={`${montserrat.className} text-black font-bold mb-4 mt-2 text-[18px] text-left`}>Upload photo</h1>
           <div onClick={() => document.getElementById("fileInput")?.click()} className="relative border-dashed border-2 p-10 flex justify-center items-center h-36 w-full overflow-hidden ">
             {addEventState.image ? (
@@ -86,6 +110,9 @@ const AddEventmodal = () => {
                 }
                 }}
             />
+
+           
+            
 
           {/* Text input for hall name */}
           <div className="flex flex-col mb-4 mt-4">
