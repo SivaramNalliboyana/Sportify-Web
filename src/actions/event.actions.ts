@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { getDbUserId } from "./user.action";
 import { revalidatePath } from "next/cache";
+import { SportEvent } from "@/components/SportCardsSection/sport_card";
 
 export async function createEvent(title: string, imageUrl:string,date: Date, city: string, category: string){
     try {
@@ -32,13 +33,14 @@ export async function createEvent(title: string, imageUrl:string,date: Date, cit
 }
 
 
-export async function getEvents(){
+export async function getEvents() : Promise<SportEvent[]>{
     try {
 
+        console.log("FETCHING EVENTS AGAIN");
         const userId = await getDbUserId();
 
         if (userId === null){
-            return;
+            return [];
         }
 
         const events = await prisma.event.findMany({
@@ -70,7 +72,7 @@ export async function getEvents(){
 
         return events;
     } catch (error) {
-        console.log("Error getting events", error);
+        return [];
     }
 }
 
@@ -191,6 +193,62 @@ export async function visitEvent(eventId:string){
         
     } catch (error) {
         return {success:false};
+    }
+}
+
+export async function searchEvent(category:string,city:string, date: Date) : Promise<SportEvent[]>{
+    try {
+       const userId = await getDbUserId();
+
+        if (userId === null){
+            return [];
+        }
+
+        console.log(city);
+        console.log("GEEETING SEARCH EVENTS");
+        
+        const events = await prisma.event.findMany({
+            where: {
+                city,
+
+            },
+
+            orderBy: {
+                createdAt: "desc"
+            },
+            include: {
+               creator: {
+                select: {
+                    name:true,
+                    image: true
+                }
+            },
+
+            favourites: {
+                select: {
+                    userId: true, 
+                },
+            },
+
+            visitors: {
+                select: {
+                    userId: true
+                }
+            }
+               
+            }
+        });
+
+
+
+        
+
+        revalidatePath(`/`)
+
+        return events;
+        
+    } catch (error) {
+        return [];
     }
 }
 

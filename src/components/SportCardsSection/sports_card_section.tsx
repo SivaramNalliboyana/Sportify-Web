@@ -1,18 +1,22 @@
-import React from 'react'
-import SportCard from './sport_card'
+'use client';
+
+import React, { useEffect, useState } from 'react'
+import SportCard, { SportEvent } from './sport_card'
 import { getEvents } from '@/actions/event.actions';
+import { usegetEventStore } from '@/hooks/useGetEvents';
 
+interface SportsCardSectionProps {
+  initialEvents: SportEvent[];
+}
 
-const SportsCardSection = async () => {
-  const events = await getEvents();
-
-  console.log({events});
+const SportsCardSection = ({initialEvents} : SportsCardSectionProps ) => {
 
   
 
+
   return (
     <div className='grid grid-cols-3 gap-8 pt-10 pl-10 pr-10 pb-10'>
-      {events?.map((e)=> (<SportCard key={e.id} event={e} />))}
+      {initialEvents.map((e)=> (<SportCard key={e.id} event={e} />))}
     </div>
   )
 }

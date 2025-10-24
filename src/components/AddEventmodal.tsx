@@ -25,11 +25,6 @@ const AddEventmodal = () => {
 
     const handleEventSubmit = async () => {
       addEventState.setisPosting(true);
-
-    
-
-      
-
         try {
           if (addEventState.date === null || addEventState.image === null){
             return;
@@ -96,6 +91,8 @@ const AddEventmodal = () => {
               <TbPhotoPlus size={40} />
             )}
           </div>
+
+          
 
             {/* Image picker class hidden */}
             <input

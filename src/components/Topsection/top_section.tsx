@@ -8,10 +8,12 @@ import { useCallback } from "react";
 import { useAddEventStore } from "@/hooks/useAddEventModal";
 import { ClerkLoaded, ClerkLoading, useAuth, UserButton, useUser } from "@clerk/nextjs";
 
+interface TopSectionProps {
+    handleSearch: (category: string, city: string, date: Date) => void
+}
 
 
-
-export default function TopSection(){
+export default function TopSection({handleSearch}: TopSectionProps){
     const openAddEventModal = useAddEventStore((state)=> state.open);
 
     return (
@@ -42,7 +44,7 @@ export default function TopSection(){
         <h1 className={`${montserrat.className} text-white font-bold py-4 text-6xl`}>BEST SPORTS BOOKING</h1>     
         <h1 className={`${montserrat.className} text-white font-bold pb-10 text-6xl`}>PLATFORM IN YOUR AREA</h1>
         <h2 className={`${montserrat.className} text-white font-semibold text-2xl pb-10`}>More players, more games, more fun. Join in today.</h2>
-        <SearchComponent/> 
+        <SearchComponent handleSearch={handleSearch}/> 
                 </div>
         </div>
     );
