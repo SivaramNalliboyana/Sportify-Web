@@ -60,7 +60,7 @@ function formatDateTime(date: Date) {
 };
 
 const SportCard = ({event}: {event:SportEvent}) => {
-    const [hasLiked, setHasLiked] = useState(event.favourites.length == 0);
+    const [hasLiked, setHasLiked] = useState(event.favourites.length != 0);
     const [isLiking, setIsLiking] = useState(false);
 
     const handleLike = async ()=> {

@@ -30,7 +30,8 @@ export default function RootLayout({
         elements: {
           footer: "hidden",
         },
-      }}>
+        
+      } } afterSignOutUrl="/sign-in">
         <html lang="en">
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}

@@ -39,9 +39,7 @@ function formatDateTime(date: Date) {
   return `${day}${ordinal(day)} ${month}, ${time}`;
 };
 
-interface Params {
-  id: string
-}
+
 
 const ViewEvent = async ({ params }: { params: { eventid: string } }) => {
     

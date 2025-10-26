@@ -4,7 +4,6 @@ import { createEvent } from '@/actions/event.actions';
 import { useAddEventStore } from '@/hooks/useAddEventModal';
 import { montserrat } from '@/utils/fonts';
 import { supabase } from '@/utils/supabase';
-import { UploadDropzone } from '@/utils/uploadthing';
 import React, { useState } from 'react'
 import DatePicker from 'react-datepicker';
 import toast from 'react-hot-toast';
